@@ -57,7 +57,7 @@ st.header("👋 Welcome to my Digital Portfolio!")
 st.subheader("Explore my journey, projects, and get in touch.")
 st.markdown("---")
 
-st.title("👨‍💻 Jawad Larik")
+st.title("👨‍🎓Jawad Larik")
 st.markdown("### Aspiring IT Professional | Python Developer & Tech Enthusiast")
 
 # ---------- About Me ----------
@@ -248,4 +248,4 @@ if submitted:
 
 # ---------- Footer ----------
 st.markdown("---")
-st.markdown("© 2025 Jawad Larik | Powered by Streamlit")
+st.markdown("© 2025 Muhammad Jawad Larik. All rights reserved.")
