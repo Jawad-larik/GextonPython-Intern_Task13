@@ -11,7 +11,7 @@ st.set_page_config(page_title="Jawad's Portfolio", layout="wide", page_icon="�
 # ---------- Sidebar (Profile Section) ----------
 with st.sidebar:
     # Profile Image
-    img_path = "assets/profile.jpg"
+    img_path = "profile.jpg"
     if os.path.exists(img_path):
         image = Image.open(img_path)
         st.image(image, width=140)
@@ -100,25 +100,25 @@ st.subheader("📑 Certifications")
 certificates = [
     { "title": "Gaming & Animation Certification",
       "desc": "Acquired skills in game design and animation through a structured program.",
-      "img": "assets/certificate1.jpg",
+      "img": "certificate1.jpg",
       "link": "",
       "Completion date": "October 2024",
     },
     { "title": "Certified Fitness Trainer",
       "desc": "Earned from Fitness Academy (PVT) Ltd (IFCA FITNESS affiliated). Gained strong foundation in fitness, health, and wellness for personal growth and lifestyle improvement.",
-      "img": "assets/certificate2.jpg",
+      "img": "certificate2.jpg",
       "link": "",
       "Completion date": "January 2025",
     },
     { "title": "Certificate of Soft Skills",
       "desc": "Completed an online course by Google through Pakistan Freelancers Association, gaining key skills in communication, teamwork, and problem-solving for personal and professional growth.",
-      "img": "assets/certificate3.jpg",
+      "img": "certificate3.jpg",
       "link": "",
       "Completion date": "August 2024",
     },
     {"title": "Introduction to Artificial Intelligence",
       "desc": "Gained foundational knowledge in AI concepts and applications. Provided by SKillup-Simplilearn.",
-      "img": "assets/certificate4.jpg",
+      "img": "certificate4.jpg",
       "link": "",
       "Completion date": "November 2024",
     }
@@ -146,14 +146,14 @@ projects = [
         "desc": "Created as a final project for my Graphic Design course, with a focus on clean, modern aesthetics for a luxury real estate poster.",
         "tools": "Adobe Illustrator | Photoshop", 
         "link": "https://github.com/Jawad-larik/GraphicDesign-Project_Real-Estate-Flyer",
-        "img": "assets/project1.png", 
+        "img": "project1.png", 
     },
     {
         "title": "AI-Based Resume Screening System",
         "desc": "Built an intelligent NLP-based app that automates resume screening with real-time results using Streamlit.",
         "tools": "Python | Streamlit | NLP",
         "link": "https://github.com/Jawad-larik/GextonPython-Intern_Task12",
-        "img": "assets/project2.png",
+        "img": "project2.png",
     },
 ]
 proj_cols = st.columns(2)
@@ -180,7 +180,7 @@ def show_pdf(file_path):
 
 st.markdown("---")
 st.subheader("📄 Resume")
-resume_path = "resumes/resume.pdf"
+resume_path = "resume.pdf"
 if os.path.exists(resume_path):
     with open(resume_path, "rb") as pdf:
         st.download_button("📥 Click here to download my latest resume (PDF)", data=pdf, file_name="Jawad_Resume.pdf")
