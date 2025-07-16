@@ -1,9 +1,13 @@
 import streamlit as st
 from PIL import Image
+from email.message import EmailMessage
 from datetime import datetime
 import pandas as pd
+import smtplib
 import base64
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Page configuration
 st.set_page_config(page_title="Jawad's Portfolio", layout="wide", page_icon="💼")
@@ -11,7 +15,7 @@ st.set_page_config(page_title="Jawad's Portfolio", layout="wide", page_icon="�
 # ---------- Sidebar (Profile Section) ----------
 with st.sidebar:
     # Profile Image
-    img_path = "profile.jpg"
+    img_path = "assets/profile.jpg"
     if os.path.exists(img_path):
         image = Image.open(img_path)
         st.image(image, width=140)
@@ -100,25 +104,25 @@ st.subheader("📑 Certifications")
 certificates = [
     { "title": "Gaming & Animation Certification",
       "desc": "Acquired skills in game design and animation through a structured program.",
-      "img": "certificate1.jpg",
+      "img": "assets/certificate1.jpg",
       "link": "",
       "Completion date": "October 2024",
     },
     { "title": "Certified Fitness Trainer",
       "desc": "Earned from Fitness Academy (PVT) Ltd (IFCA FITNESS affiliated). Gained strong foundation in fitness, health, and wellness for personal growth and lifestyle improvement.",
-      "img": "certificate2.jpg",
+      "img": "assets/certificate2.jpg",
       "link": "",
       "Completion date": "January 2025",
     },
     { "title": "Certificate of Soft Skills",
       "desc": "Completed an online course by Google through Pakistan Freelancers Association, gaining key skills in communication, teamwork, and problem-solving for personal and professional growth.",
-      "img": "certificate3.jpg",
+      "img": "assets/certificate3.jpg",
       "link": "",
       "Completion date": "August 2024",
     },
     {"title": "Introduction to Artificial Intelligence",
       "desc": "Gained foundational knowledge in AI concepts and applications. Provided by SKillup-Simplilearn.",
-      "img": "certificate4.jpg",
+      "img": "assets/certificate4.jpg",
       "link": "",
       "Completion date": "November 2024",
     }
@@ -146,14 +150,14 @@ projects = [
         "desc": "Created as a final project for my Graphic Design course, with a focus on clean, modern aesthetics for a luxury real estate poster.",
         "tools": "Adobe Illustrator | Photoshop", 
         "link": "https://github.com/Jawad-larik/GraphicDesign-Project_Real-Estate-Flyer",
-        "img": "project1.png", 
+        "img": "assets/project1.png", 
     },
     {
         "title": "AI-Based Resume Screening System",
         "desc": "Built an intelligent NLP-based app that automates resume screening with real-time results using Streamlit.",
         "tools": "Python | Streamlit | NLP",
         "link": "https://github.com/Jawad-larik/GextonPython-Intern_Task12",
-        "img": "project2.png",
+        "img": "assets/project2.png",
     },
 ]
 proj_cols = st.columns(2)
@@ -180,7 +184,7 @@ def show_pdf(file_path):
 
 st.markdown("---")
 st.subheader("📄 Resume")
-resume_path = "resume.pdf"
+resume_path = "resumes/resume.pdf"
 if os.path.exists(resume_path):
     with open(resume_path, "rb") as pdf:
         st.download_button("📥 Click here to download my latest resume (PDF)", data=pdf, file_name="Jawad_Resume.pdf")
@@ -194,21 +198,53 @@ else:
 st.markdown("---")
 st.subheader("📬 Contact Me")
 
+# Email configuration
+EMAIL_SENDER = os.getenv("EMAIL_SENDER")
+EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+def send_email_notification(name, email, message):
+    msg = EmailMessage()
+    msg["Subject"] = "New Portfolio Contact Submission"
+    msg["From"] = EMAIL_SENDER
+    msg["To"] = EMAIL_RECEIVER
+
+    msg.set_content(f"""
+You have a new message from your portfolio contact form:
+
+Name: {name}
+Email: {email}
+Message:
+{message}
+""")
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(EMAIL_SENDER, EMAIL_PASSWORD)
+            smtp.send_message(msg)
+        return True
+    except Exception as e:
+        print("Email failed:", e)
+        return False
+
 with st.form("contact_form"):
     name = st.text_input("Name")
     email = st.text_input("Email")
     message = st.text_area("Message")
     submitted = st.form_submit_button("Send Message")
-    
+
 if submitted:
     import pandas as pd
     from datetime import datetime
+
     df = pd.DataFrame([[datetime.now(), name, email, message]],
                       columns=["Timestamp", "Name", "Email", "Message"])
     os.makedirs("data", exist_ok=True)
     df.to_csv("data/contact_messages.csv", mode="a", header=not os.path.exists("data/contact_messages.csv"), index=False)
-    st.toast("✅ Message sent!")
-    st.balloons()  # Adds a fun balloon animation
+
+    if send_email_notification(name, email, message):
+        st.toast("✅ Message saved & email sent successfully!")
+    else:
+        st.warning("⚠️ Message saved but email failed.")
+        st.balloons()  # Adds a fun balloon animation
 
 # ---------- Footer ----------
 st.markdown("---")
