@@ -87,6 +87,7 @@ cd streamlit-portfolio
 streamlit
 pandas
 Pillow
+dotenv
 ````
 
 ```bash
